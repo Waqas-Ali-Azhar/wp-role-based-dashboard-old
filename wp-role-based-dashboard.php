@@ -1,97 +1,73 @@
 <?php
-/*
-Plugin Name:  WP Role Based Dashboard
-Plugin URI:   https://waqasali.pro/projects/wp-role-based-dashboard
-Description:  Create Multiple Dashboards Based On User Roles
-Version:      1.0
-Author:       Waqas Ali
-Author URI:   https://waqasali.pro
-License:      GPL2
-License URI:  https://www.gnu.org/licenses/gpl-2.0.html
-Text Domain:  wp-role-based-access
-Domain Path:  /languages
-*/
 
 /**
-* No Script Kiddies
-*/
-defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+ * 
+Plugin Name:       WordPress Role Based Dashboard
+Plugin URI:        http://waqasali.pro
+Description:       Provides facility to declared dashboards based on user roles 
+and show content in blocks
+Author:            Waqas Ali Azhar
+Author URI:        http://waqasali.pro
+Version:           1.0
 
-/* WPRBD PATH */
-define('WPRBD_PATH',dirname(__FILE__).'/');
-
-/* WPRBD version */
-define('WPRBD_VERSION','1.0');
-
-/* WPRBD Uri Constant */
-define('WPRBD_DIR',plugin_dir_url(__FILE__));
-
-/* WPRBD Options Slug */
-define('WPRBD_OPTIONS_SLUG','wprbd_options');
-
-
-/* Data Constants */
-
-require_once(WPRBD_PATH . 'includes/constants.php');
-
-
-/* Initialize Admin */
-
-require_once(WPRBD_PATH . 'includes/adminpages.php');
-
-/* All Admin Functions */
-require_once(WPRBD_PATH . 'adminpages/callbacks.php');
-
-
-
-
-
-/* Plugin Activation Hooks */
-function wprbd_register_activaton(){
-	global $wpdb;
-	$tableName = $wpdb->prefix.DASHBOARD_TABLE;
-	$sql = "CREATE TABLE ".$tableName."(
-	id mediumint(9) NOT NULL AUTO_INCREMENT,
-	name varchar(255) NOT NULL,
-	user_role text NOT NULL,
-	data text Not Null,
-	UNIQUE KEY id (id)
-	)";
-
-	require_once(ABSPATH."wp-admin/includes/upgrade.php");
-	dbDelta( $sql );
-
-}
-
-register_activation_hook(__FILE__,'wprbd_register_activaton');
-
-
-
-/**
- *
- * Adding menu pages for plugin settings
- *
  */
 
-function wprbd_menu_pages(){
+define('WPRBD_VERSION',1.0);
+define('WPRBD_PLUGIN_DIR',dirname(__FILE__));
+define('WPRBD_PLGUIN_URL',plugins_url('',__FILE__));
 
-	add_menu_page('WPRBD Settings','WPRBD','manage_options','wprbd','wprbd_settings_page',WPRBD_PATH.'images/icon_wrapper.png',20);
-
-}
-/**
- *
- * Menu Page Output
- *
- */
-
-
-function wprbd_settings_page(){
-
+function wprbd_admin_init(){
+	include_once WPRBD_PLUGIN_DIR . '/admin/wprbd-admin-pages.php';
 }
 
-//add_action('admin_menu','wprbd_menu_pages')
+
+
+function wprbd_init_frontend(){
+	if ( ! function_exists( 'wprbd_theme' ) ) {
+		include_once WPRBD_PLUGIN_DIR . '/template-wprbd.php';
+	}
+}
+
+
+function wprbd_menu(){
+	global $menu;
+
+
+	
+	
+	$menu_placement = 1000;
+	for ($i= 0; $i<$menu_placement; ++$i) {
+		if(!isset($menu[$i])){
+			
+			//$menu_placement = $i;
+			break;
+		}
+	}
+
+
+	
+	$list_page = add_menu_page(
+		'WPRBD Dashboard',
+		'WPRBD Dashboard',
+		'manage-options',
+		'wprbd-dashboard',
+		'wprbd_page_handler','',$menu_placement
+	);
+
+
+	$create_page = add_submenu_page('wprbd-dashboard',
+		'Create New Dashboard',
+		'Add New',
+		'manage_options',
+		'wprbd-create',
+		'wprbd_create_dashboard_page'
+		);
 
 
 
+}
+add_action( 'init', 'wprbd_init_frontend' );
+add_action('admin_menu','wprbd_menu',9999);
+add_action( 'admin_init', 'wprbd_admin_init' );
 
 ?>
