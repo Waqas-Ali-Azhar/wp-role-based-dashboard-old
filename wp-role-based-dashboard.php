@@ -17,6 +17,7 @@ define('WPRBD_PLUGIN_DIR',dirname(__FILE__));
 define('WPRBD_PLGUIN_URL',plugins_url('',__FILE__));
 
 function wprbd_admin_init(){
+	include_once WPRBD_PLUGIN_DIR . '/admin/admin.php';
 	include_once WPRBD_PLUGIN_DIR . '/admin/wprbd-admin-pages.php';
 }
 
@@ -24,6 +25,7 @@ function wprbd_admin_init(){
 
 function wprbd_init_frontend(){
 	if ( ! function_exists( 'wprbd_theme' ) ) {
+		
 		include_once WPRBD_PLUGIN_DIR . '/template-wprbd.php';
 	}
 }
@@ -69,5 +71,23 @@ function wprbd_menu(){
 add_action( 'init', 'wprbd_init_frontend' );
 add_action('admin_menu','wprbd_menu',9999);
 add_action( 'admin_init', 'wprbd_admin_init' );
+
+function wprbd_dashboard_table(){
+	global $wpdb;
+	$table_name = $wpdb->prefix."wprbd_dashboards";
+
+	$sql = "CREATE TABLE ".$table_name."(
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		name varchar(255) NOT NULL,
+		path varchar(255) NOT NULL,
+		user_role varchar(255) NOT NULL,
+		UNIQUE KEY id (id)
+	)";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+}
+
+register_activation_hook( __FILE__, 'wprbd_dashboard_table' );
 
 ?>
