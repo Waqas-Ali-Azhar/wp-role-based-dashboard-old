@@ -1,12 +1,14 @@
 <?php
 
 function wprbd_page_handler(){
-	include WPRBD_PLGUIN_DIR.'/admin/templates/page-dashboards-list.php';	
+	include WPRBD_PLUGIN_DIR.'/admin/templates/page-dashboards-list.php';	
 
+	
 	$redirect = FALSE;
 
 	if(isset($_GET['action'])){
 		$redirect = TRUE;
+
 		switch( $_GET['action'] ){
 			case 'create':
 

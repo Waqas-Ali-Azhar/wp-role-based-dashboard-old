@@ -5,18 +5,18 @@
 </div>
 
 <div id="qw-create">
-	<form action='admin.php?page=query-wrangler&action=create&noheader=true'
+	<form action='admin.php?page=wprbd-dashboard&action=create&noheader=true'
 	      method='post'>
 		<div class="qw-setting">
 			<label class="qw-label">Dashboard Name:</label>
-			<input class="qw-create-input" type="text" name="dashboard-name" value=""/>
+			<input class="qw-create-input" type="text" name="dash_name" value=""/>
 
 			<p class="description">Dashboard Name depicts the user it is being created for</p>
 		</div>
 
 		<div class="qw-setting">
 			<label class="qw-label">User Role:</label>
-			<select name="qw-type" class="qw-create-select">
+			<select name="user_role" class="qw-create-select">
 				<?php
 				  	$options = '';
 				    foreach ($arguments['user_roles'] as $key => $value) {

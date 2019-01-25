@@ -51,7 +51,7 @@ function wprbd_menu(){
 	$list_page = add_menu_page(
 		'WPRBD Dashboard',
 		'WPRBD Dashboard',
-		'manage-options',
+		'manage_options',
 		'wprbd-dashboard',
 		'wprbd_page_handler','',$menu_placement
 	);

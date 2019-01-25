@@ -8,13 +8,19 @@ if(!class_exists('WP_List_Table')){
 
 class Wprbd_list_table extends WP_List_Table{
 
-	global $status,$page;
+
+function _constructor(){
+	global $status;
+	global $page;
 
 	parent::_constructor(array(
 		'singular' => 'dashboard',
-		'plural' => 'dashboards'
+		'plural' => 'dashboards',
 		'ajax'=> FALSE
 	));
+
+}
+	
 
 
 
@@ -118,9 +124,9 @@ function column_default( $item , $column_name){
 
  	$per_page = 12;
 
- 	$columns = this->get_columns();
+ 	$columns = $this->get_columns();
  	$hidden = array();
- 	$sortable = this->get_sortable_columns();
+ 	$sortable = $this->get_sortable_columns();
 
  	$this->_colums_headers = array($columns, $hidden, $sortable);
 
@@ -139,8 +145,8 @@ function column_default( $item , $column_name){
  	}
 
  	$orderby ='name';
- 	if(!empty($_REQUEST['orderby'])) &&
- 		in_array($_REQUEST['orderby'],array('name','user_role')){
+ 	if(!empty($_REQUEST['orderby']) &&
+ 		in_array($_REQUEST['orderby'],array('name','user_role'))) {
  			$ordery = $_REQUEST['orderby'];
  	}
 
@@ -161,7 +167,7 @@ function column_default( $item , $column_name){
 
  	$total_items = count( $data );
 
- 	$data = array_slice($data,($current_page - 1) * $per_page),$per_page);
+ 	$data = array_slice($data,(($current_page - 1) * $per_page),$per_page);
 
  }
 

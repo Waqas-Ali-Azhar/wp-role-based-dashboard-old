@@ -28,17 +28,23 @@ function wprbd_admin_templates($templates){
 }
 
 
-function wprbd_insert_new_dashboard(){
+function wprbd_insert_new_dashboard($post){
 	global $wpdb;
+	
 	$table_name = $wpdb->prefix . "wprbd_dashboards";
 
 	$values = array(
-		'name' => $post['dash-name'],
-		'user_role' => $post['user-role'],
-		'path' => $post['path']
+		'id' => 1,
+		'name' => $post['dash_name'],
+		'path' => $post['path'],
+		'user_role' => $post['user_role']
+		
 	);
 
-	$wpdb->insert($table_name,$values);
+	$wpdb->insert( $table_name, $values );
+
+	
+
 	return $wpdb->insert_id;
 }
 
